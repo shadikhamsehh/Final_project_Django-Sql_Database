@@ -55,11 +55,31 @@
             https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
 
         <form >
-         <button data-toggle="collapse"  class="container-fluid" data-target="#demo">Start Exam </button>
-
+         <button data-toggle="collapse"  class="container-fluid" data-target="#exam" >Start Exam </button>
            <div id="exam" class="collapse">
+             {% if user.is_authenticated %}
+               {% for question_text in course.question_set.all%}
+                <div id="question">
+                 <h5 class="black_text">
+                     {{question.question_text}}
+                 </h5>
+                </div>
+                {% endfor %}
+               
+                 <div class="form-check">
+                     <label class= "form_check_label">
+                      {% for question_id in choice.question_id_set.all %}
+                         <input type="checkbox" class="form-check-input" value="">
+                         {{choice.choice_text}}
+                     </label>
+                      {% endfor %}
+                 </div>
 
-  
+                 {% else % }
+                 <h1>login please</h1>
+                 {% endif %}
+               
+
             </div>
         </form>
          <!---   A collapse example here:
@@ -83,12 +103,12 @@
 
             <!-- A choice submission form example-->
             <form id="questionform" action="point to a submit view" method="post">
-                        ... for each question in the course ...
+                        <!--... for each question in the course ...-->
                         <div class="card mt-1">
                             <div class="card-header"><h5>{{ question.question_text}}</h5></div>
                             {% csrf_token %}
                             <div class="form-group">
-                               ... for each choice in the question ...
+                               <!--... for each choice in the question ...-->
                                 <div class="form-check">
                                     <label class="form-check-label">
                                         <input type="checkbox" name="choice_{{choice.id}}"

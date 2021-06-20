@@ -11,6 +11,8 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
+def course_details(req):
+    return render(req, template_name='course_details_bootstrap.html')
 
 
 def registration_request(request):
