@@ -116,7 +116,7 @@ class Enrollment(models.Model):
     #        return False
 class Question(models.Model):
     grade= models.FloatField(default=0.0)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    Lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     question_text= models.CharField(max_length=1000)
    # lesson_id=models.ForeignKey(lesson,on_delete=models.CASCADE)
  
