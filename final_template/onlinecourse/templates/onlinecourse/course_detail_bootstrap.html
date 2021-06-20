@@ -55,32 +55,30 @@
             https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
 
         <form >
-         <button data-toggle="collapse"  class="container-fluid" data-target="#exam" >Start Exam </button>
-           <div id="exam" class="collapse">
-             {% if user.is_authenticated %}
-               {% for question_text in course.question_set.all%}
-                <div id="question">
-                 <h5 class="black_text">
-                     {{question.question_text}}
-                 </h5>
+         {% if user.is_authenticated %}
+          <button data-toggle="collapse"  class="container-fluid" data-target="#exam" >Start Exam </button>
+            <div id="exam" class="collapse" action="{% url 'onlinecourse:submit' course.id %}" method="post">
+                {% for question in course.question_set.all %}
+                    <div class="card mt-1">
+                        <div class="card-header">{{ question.question_text}}/div>
+                        {% csrf_token %}
+                        <div class="groupquestion">
+                            {% for choice in question.choice_set.all %}
+                            <div class="check">
+                                <label class="check-label">
+                                    <input type="checkbox" name="choice_{{choice.id}}"
+                                            class="check-input" id="{{choice.id}}"
+                                            value="{{choice.id}}">{{ choice.choice_text }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <input class="button" type="submit" value="Submit">
                 </div>
-                {% endfor %}
-               
-                 <div class="form-check">
-                     <label class= "form_check_label">
-                      {% for question_id in choice.question_id_set.all %}
-                         <input type="checkbox" class="form-check-input" value="">
-                         {{choice.choice_text}}
-                     </label>
-                      {% endfor %}
-                 </div>
-
-                 {% else % }
-                 <h1>login please</h1>
-                 {% endif %}
-               
-
-            </div>
+            {% endif %}
+   
         </form>
          <!---   A collapse example here:
             <div id="exam" class="collapse">
