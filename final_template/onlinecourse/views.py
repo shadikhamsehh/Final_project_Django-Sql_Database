@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # <HINT> Import any new Models here
-from .models import Course, Enrollment
+from .models import Course,Enrollment,Question,Choice,Submission
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -11,8 +11,9 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 # Create your views here.
-def course_details(req):
-    return render(req, template_name='course_details_bootstrap.html')
+#def course_details(request):
+   # return render(req, template_name='course_details_bootstrap.html')
+
 
 
 def registration_request(request):
@@ -112,7 +113,39 @@ def enroll(request, course_id):
          # Collect the selected choices from exam form
          # Add each selected choice object to the submission object
          # Redirect to show_exam_result with the submission id
-#def submit(request, course_id):
+def submit(request, course_id):
+    enrollment= get_object_or_404(Enrollment,pk=course_id)
+
+    if request.method == "POST":
+        enrollment = request.POST["enrollment"]
+        choices = request.POST["choices"]
+    submitted_anwsers= []
+    for key in request.POST:
+        if key.startswith('choices'):
+            value = request.POST[key]
+            Choice_id = int (value)
+            submitted_anwsers.append(Choice_id)
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(Submission.id,)))
+
+
+def show_exam_result(request, course_id, submission_id):
+
+	#if request.method== 'Get':
+       course = course.objects.get(pk=course_id)
+       submission = submission.objects.get(pk=submission_id)
+       choices = submission.objects.get(pk=choice_id)
+         
+
+       choice_id= submission.objects.filter(name='').values_list('id', flat=True).first()
+       if (Choice.is_correct == 'true'):
+         messages.success(request, 'correct answer')
+       else:
+        messages.error(request, 'wrong answer')
+
+       total_score = sum([grade.is_get_score() for grade in Question])
+
+     
+
 
 
 # <HINT> A example method to collect the selected choices from the exam form from the request object
@@ -132,7 +165,7 @@ def enroll(request, course_id):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
-#def show_exam_result(request, course_id, submission_id):
+
 
 
 
